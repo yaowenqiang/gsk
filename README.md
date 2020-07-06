@@ -204,10 +204,69 @@
 > docker inspect -f '{{ .NetworkSettings.IPAddress }}'  docker_name
 
 ## Docker Command overview
+
+> docker save
+> docker load
+
+> docker commit
+
+> docker pause
+> docker unpause
+
+> docker stop
+> docker start
+
+> docker rm 
+
+
 ## Understanding Docker Networking 
+
+
++ Default networking uses Linux bridges
+  + Different containers on the same host can communicate;
+  + communications with containers on other hosts is not possible
+  + As the bridge uns NAT, containers are not directly accessible from the outside
++ Overlay networking: using overlay networking technologies allows containers to communicate if they're running on different hosts
++ Other technologies do exist, but are irrelevant if you're going to use Kubernetes.
+
+### Exposing Container Ports
+
++ By default, container ports are not accessible from the outside
++ Use port mapping to make them accessible:
+  + docker run -d --name httpd -p 8080:80 httpd
+  + curl http://localhost:8080
++ Alternatively, you can specifiy an IP address for the port forward
+  + docker run -d --name httpd -p 192.168.1.150:8090:80 httpd
+
+
+> bridge
+
 ## Understanding Docker Storage
 
+### Default Storage
+
++ Containers are based on different filesystem layers
++ You can modify contents of a running container, but storage by default is ephemeral, it's gone after a restart
++ All modifications in running containers are written to a read/writable filesystem layer that by default is removed when the container is stoppped
++ Notice that this R/W filesystem layer should not be used for persistent storage, as it doesn't perform well 
++ Also notice that Docker keeps the ephemeral storage around for some time after the container is stopped. making it easier to troubleshoot based on information in logs
+
+### Host Directory Storage
+
++ Persistent storage can be offered by using a host directory
++ The container will bind-mount to this host directory to wirte and access persistent data
+  + Notice that in RHEL, this host directory should have the svirt_sandbox_file_t context label
++ On the host directory, use chonw to set the appropriate UID and GID as owner
+ + Notice that this refers to the UID and GID of a user in the container, which may not exists on the host, for instance, on a mariadb container, the user that mariadb is running are UID 27 and GID 27,Apply these using chown -R 27:27 /var/local/mysql
+
+ > mkdir -p /var/local/mysql
+ > setenforce 0
+ > chown -R 27:27 /var/local/mysql
+ > docker pull mariadb
+ > docker run --name mariadb -d -v /var/local/mysql:/var/lib/mysql -e MYSQL_USER=user -e MYSQL_PASSWORD=password -e MYSQL_DATABASE=address -e MYSQL_ROOT_PASSWORD=password mariadb
+      
 # Setting up a Lab Environment
+
 # Using Kubernetes Components
 # Scaling and Upgrades
 # Kubernetes Networking
