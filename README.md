@@ -267,6 +267,88 @@
       
 # Setting up a Lab Environment
 
+## Installing kubectl
+
+### Understaning Kubectl
+
++ kubectl is the generic Kubernetes management command
++ It use the ~/.kube/config file to find information on what to connect to
++ It is available for all platforms to allow you to manage Kubernetes
+
+### Installing kubectl
+
++ kubectl is the management command that needs to be available on the management workstation
++ You'll use it to interface the kubernetes cluster. no matter where it will be running
++ There are different ways to install it 
+  + From a cloud client
+  + Run from a cloud shell
+  + Compile from source
+  + Run from the release binaries
+
+### Installing on Linux from the Release Binaries
+
+There are different ways to install it 
+  + From a cloud client
+  + Run from a cloud shell
+  + Compile from source
+  + Run from the release binaries
+
+#### Install on Linux
+
+> curl -LO https://storage.googleapis.com/kubenertes-releases/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/amd64/kubectl
+> chmod +x kubectl
+> mv kubectl /usr/local/bin
+> kubectl version
+> kubectl get nodes(only if a working cluster can be found)
+
+#### Install on MacOS
+
+> install homebrew: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+> brew install kubectl
+> kubectl version to verify
+> kubectl get nodes[-insecure-skip-tls-verify] (only if a working cluster can be found)
+
+> firewall-cmd list-all
+> firewall-cmd --permanent --zone=FedoraWorkstation --add-masquerade
+> firewall-cmd --permanent --zone=FedoraWorkstation --add-forward-port=port=8443:proto=tcp:toport=8443:toaddress=192.168.90.100
+> kubectl get nodes --insecure-tls-verify
+
+
+
+
+## Installing minikube
+
+
+### Understanding Minikube
+
++ Minikube is a single-VM demo environment that runs on top of VirtualBox
++ The minikube start command will run a VirtualBox VM with a single-node Kubernetes deployment as well as a Docker engine
+> It's not for production, but it's excellent for learning Kubernetes!
+
+### Minikube Requirements
+
++ Physical machine
++ 2 GB of RAM(4GB recommended)
++ Hardware assisted virtualization
++ No other virtualization stack
+
+### Installing minikube
+
+> installing VirtualBox: sudo yum install virtualbox
+> Look up the current Minikube release, and use that in the command below
+> curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25/minikube-linux-amd64
+> chmod +x minikube
++ sudo mv minikube /usr/local/bin
+> minikube start
+> lubectl cluster-info
+> kubectl get nodes
+## Working with Minikube
+## Working with kubectl
+## Importing images to Kubernetes
+## Working with YAML Files
+## Running an application from the Kubernetes Dashboard
+## Lab: Running a Kubernetes Application
+
 # Using Kubernetes Components
 # Scaling and Upgrades
 # Kubernetes Networking
