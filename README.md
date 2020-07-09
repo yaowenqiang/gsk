@@ -342,8 +342,63 @@ There are different ways to install it
 > minikube start
 > lubectl cluster-info
 > kubectl get nodes
+
+> grep vmx /proc/cpuinfo
+
 ## Working with Minikube
+
+> minikube --help
+> minikube start
+> minikube status
+> minikube ssh
+> top
+> ps aux 
+> ps aux  | grep localkube
+> minikube ip
+> minikube dashboard
+> minikube logs
+
+
 ## Working with kubectl
+
+> kubectl --help
+> kubectl run --help
+> kubectl run nginx --image=nginx
+> kubectl get --help
+> kubectl get endpoints
+> kubectl get po
+> kubectl get all
+> kubectl config view
+
+### Conecting to a Cluster
+
++ Kubernetes uses a config file in ~/.kube to specify details about the cluster you want to connect to
++ When setting up a cluster, this config is automatically created. you may modify it manually
++ Use kubectl config view to show current configuration
+
+
+### Understanding the config File
+
++ Config file is used to define 3 different elements
+  + Cluster - the kubernetes cluster
+  + user - the authorized user
+  + context the part of the cluster the user wants to access. typically a namespace
++ Multiple clusters, users and contexts can be referred to from the config file
+
+
+### Connecting to a Remote Cluster
+
++ When setting up a cluster, the config file is created automatically
++ To connect to a remote cluster, you'll need to set up appropriate credentials, consisting of a client certificate and a client key
++ Use kubectl config set-cluster mycluster --server=http://ip:port --api=version=v1 to connect to the cluster
+> next use kubectl use-context mycluster to  start using it.
+| When working with mulitple configuration files, set the KUBECONFIG variable with as the argument a list of config files where each file is separated by a :
+
+> kubectl config access to multiple clusters
+
+
+
+
 ## Importing images to Kubernetes
 ## Working with YAML Files
 ## Running an application from the Kubernetes Dashboard
