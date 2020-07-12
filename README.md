@@ -269,7 +269,7 @@
 
 ## Installing kubectl
 
-### Understaning Kubectl
+### Understanding Kubectl
 
 + kubectl is the generic Kubernetes management command
 + It use the ~/.kube/config file to find information on what to connect to
@@ -443,6 +443,63 @@ There are different ways to install it
 ## Lab: Running a Kubernetes Application
 
 # Using Kubernetes Components
+
+## Understanding Kubernetes Resource Types
+
+
+## Understanding the Pod
+
+What is a Pod?
+
++ A group of one or more containers, shared storage and networking, and a specification of how to run these containers
++ All containers in the pod are always co-located and co-scheduled
++ Everything within a pod runs within a shared context
++ You can see a pod as an application or logical host
++ Pod are considered  to be ephemeral, if a pod is stopped ,it will go away
++ If the node running a pod crashes, the pod will be shceduled to go somewhere else
+
+Why Pods?
+
++ Pods implement the application you want to offer to end users
++ Everything within a pod needs to work together,so you don't want to work at a container level
++ Containers in the pod have the following requirements which make sense running them in the same pod
+  + deployment: it all belongs together
+  + co-location
+  + shared fate, as containers depend on one another
+  + Resource sharing
+  + dependency management
+
+
+Pod networking
+
++ Applications in a pod all use the same network namespaces
+  + One IP address for the pod
+  + One range of ports that needs to be shared by all containers in the pod
++ Therefore, containers in a pod must coordinate their usage of ports
++ Each pod has one IP address
++ The host name to that ip address is set to the pods name
+
+## Starting Pods
+
+
+Starting Pods
+
++ individual Pods can be started using kubectl create -f <name>.yaml
++ Alternatively, use the dashboard running on port 30000
++ After starting a pod, use kubectl get pods to get an overview of all running pods
++ kubectl describe pods shows all details about a pod
++ use kubectl delete pod podname to delete it
+
+
+## Understading Namespaces
+## Working with Namespaces
+## Working with Replica Sets
+## Understading Deployments
+## Lab: Running a Deployment
+
+
+
+
 # Scaling and Upgrades
 # Kubernetes Networking
 # Accessing Pods
