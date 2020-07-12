@@ -392,15 +392,53 @@ There are different ways to install it
 + To connect to a remote cluster, you'll need to set up appropriate credentials, consisting of a client certificate and a client key
 + Use kubectl config set-cluster mycluster --server=http://ip:port --api=version=v1 to connect to the cluster
 > next use kubectl use-context mycluster to  start using it.
-| When working with mulitple configuration files, set the KUBECONFIG variable with as the argument a list of config files where each file is separated by a :
++ When working with mulitple configuration files, set the KUBECONFIG variable with as the argument a list of config files where each file is separated by a :
+
 
 > kubectl config access to multiple clusters
 
+> google kubernetes configure access to multiple clusters
 
 
 
 ## Importing images to Kubernetes
+
+### Workflow Overview
+
++ Use Docker images to created pods
++ Kubernetes uses Pods as the smallest managed items
++ Easily create basic Pods using the dashboard
++ Or use YAML files for increased scalability
+
+
+### Importing Images into kubernetes
+
++ To start using Kubernetes, you'll need to pull container images into the pod
++ To use custom images, create your own Docker images and push them to the registry
++ Alternatively, pull images from public containers
+  + Using Docker hub or any private container registry
+  + Using Docker Hub images makes sense in a small private deployment
++ Use the Kubernetes Dashboard for an easy way to get started
+  + Start through minikube dashboard
+  + Or by address port 30000 on the Kubernetes Master node
+
+
 ## Working with YAML Files
+
+### Creating Pods with YAML Files
+
++ Use kubectl with  a YAML file to make creating pods easy
++ kubectl create -f <name>.yaml --validate=false
++ kubectl get pods will show the new pod
++ kubectl describe pods show all details about pods, including the information about its containers
+  + kubectl describe pods busybox
+  + kubectl describe pods busybox -o yaml
+  + kubectl describe pods busybox -o json
+
+
+> kubectl describe pods busybox -o yaml
+
+
 ## Running an application from the Kubernetes Dashboard
 ## Lab: Running a Kubernetes Application
 
