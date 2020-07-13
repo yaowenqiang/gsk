@@ -492,7 +492,33 @@ Starting Pods
 
 
 ## Understading Namespaces
+
+Understanding Namespaces
+
++ A namespace is a strict isolation that occurs on Linux Kernel level
++ Every kubelctl request uses namespaces to ensure that resources are strictly separated and names don't have to bbe unique
++ Namespaces can be added when creating a pod, thus ensuring that a pod is availiable in a specific namespace only
++ Before adding a pod to a namespace, ensre that the namespace exists
++ Use namespaces in cluster environments with many users that are spread across multiple teams and  projects
+
+
+Default Namespaces
+
++ By default, Kubernetes has three namespaces
+  + default
+  + kube-public
+  + kube-system
+    
 ## Working with Namespaces
+
+> kubectl get ns
+> kubectl create ns secrect
+> kubectl get ns secret
+> kubectl get ns secret -o yaml
+> kubectl describe ns secret
+
+
+
 ## Working with Replica Sets
 ## Understading Deployments
 ## Lab: Running a Deployment
