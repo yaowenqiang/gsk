@@ -520,8 +520,54 @@ Default Namespaces
 
 
 ## Working with Replica Sets
+
+Understanding Replica Sets
+
++ The pod is the moste basic entity in Kubernetes
++ Replica Sets come next and are used to determine the number of instances that are needed of a pod 
++ Replica Sets replace replication controllers that were used in previous versions of Kubernetes 
+  + Replication controller-based commands like kubectl get rc won't work
++ Replica Sets can be created directly, but shouldn't ;use deployments instead
++ Applications that are lanuched throught a deployment automatically create replica sets
+
+> kubectl run nginx --image=nginx
+> kubectl get deployments
+> kubectl get rs
+> kubectl get rs nginx-76df748b9 -o yaml
+> kubectl scale --help
+> kubectl scale rs nginx-76df748b9 --replicas=3
+> kubectl scale --replicas=3 deployment nginx
+
+
+
+
 ## Understading Deployments
+
+Understanding Deployments
+
++ Deployments are used to create and automate replca sets
++ Deployments instruct the cluster how to create and scale aplications
++ Deployments controller will monitor instances of an application
++ Deployments allow for the creation of multiple replica sets for rolling updates or rollbacks
+
+> kubectl get all
+> kubectl get deployments
+> kubectl scale --replicas=20 deployment nginx
+> kubectl scale --replicas=10 deployment nginx
+> kubectl delete rs nginx-76df748b9
+
+
+
 ## Lab: Running a Deployment
+
+> kubectl run hazelcast --image=hazelcast --port=5701
+> kubectl logs hazelcast-5c656cb674-72f9r
+> kubectl describe deployments.apps hazelcast
+> kubectl describe pod hazelcast-5c656cb674-72f9r
+> kubectl logs hazelcast-5c656cb674-72f9r
+
+
+
 
 
 
