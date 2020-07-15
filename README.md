@@ -569,10 +569,60 @@ Understanding Deployments
 
 
 
-
-
-
 # Scaling and Upgrades
+
+## Working with Object Properties
+
++ When creating a pod or deployment, different properties are set
++ Use kubectl describe pods <name> to see properties of a specific pod
++ Use kubectl get {deployments|rs|pods} -o yaml for an overview of all properties
+  + Alternatively , use -o json to write to JSON output format
++ The object properties are shown in different sections, which are listed under the items:
++ apiVersion: The moste recent version of the API that allows us to use this type
++ kind: the type of object
++ metadata: current object metadata, may include items not shown here such as podAffinity and nodeAffinity
++ spec: run-time parameters used by this object
++ status: current status information
+
+### Common Object Properties 1
+
+
++ apiVersion: the current version of the API
++ list declaration of the list of items that follows
++ annotations additional information about bhe object
++ creationtimestamp
++ generation how many times this object has been edited
++ labels strings that can be used for further identification
++ name name of this object ,set from the command line
++ resourceVersion version of this object as maintained in the end databse
++ selfLink link to the location of this information in the API
++ uid unique UID
++ replicas number o replicas that is expected
++ selector a collection of values that is used for determining availability of replicas
++ matchLabels label that is used internally to determine where the resource should be scheduled
+
+
+### Common Object Properties w
+
++ strategy contains vales about how to update pods
++ maxSurge maximum additional number of pods that can be created. can be higher than the desired number of pods to guarantee continued access before deleting old pods
++ maxUnavailable the max number of pods that may be in an anavailable state
++ type type of resource
++ template data for te replicaset to determine how to deploy the object
++ containers specifications for the containers that should be used
++ resources may be used to set resource restrictions, such as limit on the number of CPUs or memory
++ teminationMessagePath where to send log messages to
++ teminationMessagePolicy how to deal with termination messages, default to "file"
++ terminationMessagePolicy how to deal with termination messages, deault to "file" handled by kubenete DSN and not local developer
+
+
+## Using Labels
+## Scaling Deployments
+## Performing Rolling Updates
+## Working with DaemonSet
+## Performing Rollback
+## Lab Scaling Deployment
+
 # Kubernetes Networking
 # Accessing Pods
 # Using Volumes
