@@ -602,7 +602,7 @@ Understanding Deployments
 + matchLabels label that is used internally to determine where the resource should be scheduled
 
 
-### Common Object Properties w
+### Common Object Properties 2
 
 + strategy contains vales about how to update pods
 + maxSurge maximum additional number of pods that can be created. can be higher than the desired number of pods to guarantee continued access before deleting old pods
@@ -614,9 +614,60 @@ Understanding Deployments
 + teminationMessagePath where to send log messages to
 + teminationMessagePolicy how to deal with termination messages, default to "file"
 + terminationMessagePolicy how to deal with termination messages, deault to "file" handled by kubenete DSN and not local developer
++ dnsPolicy determines how to deal with DNS messages. By default, these will be handled by Kubernetes DNS and not local resolver
+
+
+### Common Object Properties 3
+
++ restartPolicy what happens if the container gets killed
++ schedulerName allows to use something else than the default Kubernetes scheduler
++ securityContext allows for specification of security properties, such as SELinux context, suer or UID that the containers should use
++ terminationGracePeriodSeconds how long it takes for a SIGKILL to kick in of the container is not terminated properly
++ (status parameters)
++ availableReplicas default number of replicas that has been specified
++ observedGeneration shows how often the object has been updated
+
+> kubectl edit
 
 
 ## Using Labels
+
+A label is an arbitray string that administrators can use to select or exclude objects
++ They can be used to group objects which do not have an obvious relation by themselfs
++ Example labels:
+  + release: stable, release; beta
+  + environment: dev, environment: production
++ Labels can be used from the command line, or from YAML files to use nodeSelectors
+
+
+### Using nodeSelector
+
++ nodeselector can be used to identify nodes where a pod is allowe to run
++ To use them, set labels to nodes, using kubectl label node mynode disktype=hdd
++ Verify using kubectl get nodes --show-labels
++ Add nodeSelector to your Pod specification
+
+
+### Setting Labels
+
+> kubectl label pods <name> foo=bar
+> kubect get pods --show-labels
+
+set the label in the metadata section when creating an object
+
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+>
+
+> kubect get pods -Lrun --show-labels
+> kubect get pods -l run=nginx
+> kubectl label pods nginx-76df748b9-b8hv5 run-
+
+
+
 ## Scaling Deployments
 ## Performing Rolling Updates
 ## Working with DaemonSet
