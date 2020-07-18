@@ -669,6 +669,20 @@ metadata:
 
 
 ## Scaling Deployments
+
+> kubectl scale Deployment nginx -replicas=3
+
++ Notice that scaling deployments may fail because of limited availiablity of resources
++ kubectl get deployments nginx -o json
+  + Notice that different output formats are availiable use -o yaml of you prefer seeing it in yaml, or -o json for json
+  + In the output, look for the labels; a run label is automatically added
++ kubectl get pods -Lrun filters on pods with the label running
+  + the run label is used to determine if sufficient replicas are available
+  + Remove one "run" label and you'll notice that a new pod will be created immediately
+  + use kubectl label pods <name> run- to remove the label run
+
+
+
 ## Performing Rolling Updates
 ## Working with DaemonSet
 ## Performing Rollback
