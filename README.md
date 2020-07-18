@@ -683,9 +683,46 @@ metadata:
 
 
 
-## Performing Rolling Updates
+## Performing Rolling Upgrades
+
++ A rolling update is a change of properties in a deployment that needs to be pushed to the pods
+  + Current number of replicas
+  + Any other property , like version of the image to use
++ Updates are rolling by nature,they will be applied pod after pod so that continuity of service can be guaranteed
++ Rolling Upgrades can be triggered by editing an object and changing a value 
+
+
+
+
 ## Working with DaemonSet
+
++ DaemonSet is a controller that ensures that a single pod exists on each node in the cluster
+  + If a new node is added, the DaemonSet controller will add a pod automatically
++ Rolling out a daemonset works like starting a deployment, just set kind: DaemonSet in the application YAML file``
+
 ## Performing Rollback
+
+
+
++ Actions are stored in the object, so it's possible to perform rollbacks if that is required
++ Use kubectl rollout history for an overview of past activity
++ Failback using kubectl rollout undo
++ How rollback is applied, depends on the udpate strategy
+  + If set to OnDelete, it will be applied on deletion
+  + If set to RollingUpdate, it will be applied immediately
+
+
+> kubectl get deployments 
+> kubectl get deployments.apps nginx -o yaml | grep -i -A 4 strategy
+> kubectl set image  deployment nginx nginx=nginx:1.8.1-alpine
+> kubectl rollout history deployment nginx
+> kubectl rollout history deployment nginx --revision=1
+> kubectl rollout undo deployment nginx --to-revision=1
+
+
+
+
+
 ## Lab Scaling Deployment
 
 # Kubernetes Networking
