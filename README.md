@@ -869,11 +869,96 @@ metadata:
 > kubectl port-forward httpd-fc547bb6f-ztphw  8005:80
 
 
-
 ## using Services
+
++ Anything running in a pod is for internal use only, to expose containers in a pod to the outside world, you'll need services
++ Also services provide a higher level of flexibility in making sure that containers are available
++ A default service is created for Kubernetes, custom services can be created using kubectl expose
++ Label selectors can be used to determine which pods are added to a service
+  + Labels make working with services more flexible and intuitive, it's not mandatory to use them
+
+### Create services
+
++ Before you can put a pod in a service, it's a good idea to set a label
+  + Use kubectl describe pod httpd  and look for the label section, it contains key-value pairs that can be used
+  + Set the label using kubectl label pod httpd dept=sales
++ Expose pods to services, using kubectl expose pod httpd --type="NodePort" --port=80
+  + Pods, deployments, replication sets and replication controllers can be exposed
+  + It's also possible to expose a service throught a second service
++ Use kubectl get services to verify that a pod has been exposed
++ Use kubectl get svc
+> kubectl expose --help
+> kubectl delete service <name> will un-expose it
++ Deleting a service does not delete the pod, it just un-expose it.
+
+> kubectl expose  deployment httpd --port=80 --type=NodePort
+> kubectl get svc httpd -o yaml
+> minikube service <serviceName>
+
+
+
 ## Using DNS in Kubernetes Services
+
+### Understanding Service Name Lookup
+
++ With services exposing themselves on dynamic ports, resolving sevice name is challenging
++ As a solution, DNS is included by default in the Kubernetes platforms
++ As a result, DNS name lookup from within a pod to an exposed service happens automatically
+
+> kubectl create -f busybox.yaml
+> kubectl get services
+> kubectl exec -it busybox -- nslookup httpd
+
+### Understanding DNS implementation
+
++ Kubernetes provides a kube-dns pod that had three containers to implement the DNS service
++ The DNS server and the DNS domain that the cluster is using are provided as startup options of the kubelet process
+  + Optionally, add --resolv-conf to the Kubelet to use alternate DNS servers
+
+
+> minikube ssh
+> docker ps -a | grep dns
+> kubectl exec busybox  cat  /etc//resolv.conf
+
+
+
 ## Understanding Service Types
+
+
++ Service types determine how services are accessed
+  + ClusterIP: default provides internal access only by exposing the service on a cluster-internel IP
+  + NodePort: expose a port on Kubernetes hosts
+    + When using NodePort, each node will proxy that port into the Service
+  + LodBalancer: available in public cloud solutions. Can be used in private cloud if Kubenetes proides a plugin for that cloud type
+
+
+
 ## Using Intress
+
+
++ Ingress can be used to give services externally reachable URLs
++ An ingress controller is required for offering ingress services
++ Any service that can be used as reversed proxy can be used as ingress controller
+  + Currently, best support is available for the Nginx controller
++ To enable ingres in Minikube, use minikube addons enable ingress
++ Notice that Ingress is currently beta and futher development is expected
+  + Check https://kubeneres.io/docs/concepts/services-networking/ingress/ for up to date information
+
+
+### Using Ingress
+
++ verify service availability
++ Create an Ingress YAML file
++ Add the Ingress object to the API
++ Access the service using the ingress rule
+
+
+> minikube addons list
+> kubectl get ingress
+> kubectl get ingress nginx -o yaml
+
+> curl -k # insecure mode
+
 ## Lab: Accessing Pods
 
 

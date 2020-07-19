@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: ingress
+metadata:
+    name: nginx-ingress
+    annotations:
+        ingress.kubeneretes.io/rewrite-target:/
+spec:
+    rules:
+    - host:
+        http:
+            paths:
+            - path: /nginx
+              backend:
+                  serviceName: nginx
+                  servicePort: 80
