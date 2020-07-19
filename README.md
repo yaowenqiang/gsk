@@ -963,6 +963,40 @@ metadata:
 
 
 # Using Volumes
+
+## Understanding Kubenetes Volume Usage
+
++ Container storage by nature is ephemeral
++ Pod storage exists for the pod lifetime
+  + After termination of a container, the storage remains available
++ Persistent volumes go beyond the lifetime of a pod
++ Many types of storage can be provided
++ Alternate storage is provided in two different ways to the pod 
+  + The ConfigMap API object is used for regular data
+  + The Secret API object can be used for encoded data
+
+### Understanding Volume Access
+
++ Volumes are defined at a pod level
++ Volumes are mounted into the container
++ Mulitple pods may access the same volume
++ Outside locking is required to prevent data corruption
++ When access volumes, the pod can request a specific access mode
+  + RWO(READWriteOnce) allows read-wirte access by one node
+  + ROX(ReadOnlyMany) allows read-only by multiple nodes
+  + RWX(ReadWriteMany) allows read-write by many nodes
+
+
+
+
+
+## Understanding Volume types
+## Using  Volumes
+## Working with Persistent Volumes
+## Lab: Configuring Storage
+
+
+
 # Setting up Kubernetes for Production
 # Exploring the API
 
