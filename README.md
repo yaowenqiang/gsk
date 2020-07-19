@@ -725,8 +725,158 @@ metadata:
 
 ## Lab Scaling Deployment
 
+> kubect get rs
+> kubect run busybox --image=buxybox
+> kubectl run -it  busybox --image=busybox
+> ctrl p ctrl q to detach 
+> kubectl attach busybox-686489489-7fgdd -c busybox -i -t to  attach
+> kubectl scale deployment busybox --replicas=5
+
+> kubectl autoscale --help
+> kubectl autoscale deployment nginx --min=2 --max=5 --cpu-percent=50
+
+
 # Kubernetes Networking
+
+## Understanding Kubernetes 3-tier Networking
+
++ Networking between containers within a Pod
++ Networking between Pods
++ External exposure of services
+
+### Kubernetes Networking Needs
+
++ Connecting pods to other pods across nodes(Eas-West traffic)
++ Service discovery and load balancing
++ Exposing services for external clients(North-source traffic)
++ Segmenting networks to increase pod security
+
+### Intra-pod communication Requirements
+
++ communication between pods happens without NAT
++ All Nodes running pods can communicate to all other nodes running pods without NAT
++ No IP masking: the IP that the pod sees is the same as how other pods see it
+
+
+## Networking within a Pod
+
++ withing the Pod, containers communicate directly to one another
++ This is internal communication, handled by Docker as Kubernetes uses the Pod as the lowest level entity
++ Docker offers host private networking, where a virtual bridge docker0 is create
++ For each container that Docker creates, a Virtual Ethernet Derice is create and this is attached to the bridge
++ the eth0 within the container uses an IP address from the docker0 bridge address range
++ As a result, Docker containers can communicate to one another only if they're on the same host
++ This is also configured on purpose, using network isolation through namespaces
+
+
+### Other Communication Options
+
++ As containers within a pod really are process running on the same host, they can find eahc other via localhost
++ Other standard POSIX inter-process communication methods do apply as well
+  + SystemV semaphores
+  + POSIX shared memory
+
+> minikube ssh
+> brctl show
+> sudo yum install bridge-utils
+> sudo apt-get install bridge-utils
+> docker inspect imageId | grep -i network
+> kubectl get pods -o width
+
+### Setting up Pod-to-Pod Networking
+
+#### Understanding the CNI
+
+
++ Kubernetes uses CNI plugins to implement Pod-to-Pod
++ CNI plugins provides 3 types of networking
+  + layer 2(switching)
+  + layer 3(routing)
+  + overlay networking
+
+
+#### CNI layer 2 Configuration
+
++ Pods and nodes see subnets used for pod IP addresses as a single layer 2 domain
++ Pod-to-pod communication happens through ARP
++ Bridge plugin example:
+
+{
+    "name": "kubenet",
+    "type": "bridge",
+    "bridge": "kube-bridge",
+    "isDefaultGageway": true,
+    "ipam": {
+        "type": "host-local"
+        "subnet": "10.1.0.0/16"
+    }
+
+
+}
+
++ A layer 2 configuration is not scalable, for scalability, use routing, not switching
++ To do so, different plugins are available
+  + The Flannel plugin is one of the most common, but others exist
+  + Consult documentation at kubernetes.io for more details
+
+
+### CNI Overlay Configuration
+
++ Overlay solutions can be used to define the network completely in software, and use encapsulation - which looks a lot like VPN - to send packets from one pod to another pod
++ To use encapsulation, a tunnel interface is needed
++ Common encapsulation mechanisms such as VXLAN, GRE and more can be used to do so 
+
+## Exposing services
+
++ TO expose functionality externally, services can be used
++ A service refers to a set of pods which is base on labels
++ services work with publicly accessible IP address
+
+
+## Lab: Exploring Network Configuration
+
+> bctl show
+>for i in $(docker ps | awk '{print $1}');do docker inspect -f '{{.NetworkSettings.IPAddress}}' $i;done
+
+
+
 # Accessing Pods
+
+## Using Kuberneters Proxy
+
+
++ Kubernetes Proxy can be used to access a Kubernete locally without exposing it
++ After starting kubectl proxy, the service is accessible on the host where kubectl proxy was startetd
+  + Start as a background process, or it will occupy the current shell
++ To access a service using the proxy, use the aPI URL
+  + curl http://localhost:8001/api/v1/namespaces/default/services/ghost:<ghost-port>(ghost is the pod name)
+
+
+
+> kubectl proxy &
+> curl http://localhost:8001/version
+> curl http://localhost:8001/api/v1
+> curl http://localhost:8001/api/v1/namespaces/default/services
+
+
+## Using Port forwarding
+
++ Port forwarding provides an easy way to connect to services running in the pod
++ the exposed port will be avaiable on the kubernetes management workstation
++ kubectl port-forward httpd 8000:80 & forwards port 80 on the port httpd to port 8000 on localhost
+
+> kubectl port-forward --help
+> kubectl port-forward httpd-fc547bb6f-ztphw  8005:80
+
+
+
+## using Services
+## Using DNS in Kubernetes Services
+## Understanding Service Types
+## Using Intress
+## Lab: Accessing Pods
+
+
 # Using Volumes
 # Setting up Kubernetes for Production
 # Exploring the API
