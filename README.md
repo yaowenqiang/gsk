@@ -986,12 +986,40 @@ metadata:
   + ROX(ReadOnlyMany) allows read-only by multiple nodes
   + RWX(ReadWriteMany) allows read-write by many nodes
 
-
-
-
-
 ## Understanding Volume types
-## Using  Volumes
+
++ HostPath
++ EmptyDir
++ NFS
++ Git Repo
++ FC
++ ISCISI
++ Cephfs
++ RBD
++ Azure Disk
++ GCE
++ AWS Elastic Block Store
+
+
+
+
+## Using Volumes
+
+
++  Creating a Volume
+  + kubectl -f volumes.yaml --validate=false
+  + kubectl get pods
++ After creation, test that you can use it
+  + kubectl exec -ti vol -c centos -- touch /test/myfile
+  + kubectl exec -ti vol -c centos -- ls -l  /test
+  + Note: try this command without --
+
+> kubectl create -f morevolumes.yaml
+> kubectl exec -it morevol -c centos -- touch /centos/test
+> kubectl exec -it morevol -c centos2 --  ls -l  /centos2
+
+
+
 ## Working with Persistent Volumes
 ## Lab: Configuring Storage
 
