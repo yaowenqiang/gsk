@@ -5,7 +5,7 @@ metadata:
 spec:
     volumes:
     - name: pv-storage
-      PersistentVolumeClaim:
+      persistentVolumeClaim:
           claimName: pv-claim
     containers:
     - name: pv-container

@@ -1021,6 +1021,55 @@ metadata:
 
 
 ## Working with Persistent Volumes
+
++ A PersistentVolume(PV) is an indenpendent Kubeneters resource
++ The PV is not dependent from any pod and therefore survives a pod
++ The PersistentVolumeClaim(PVC) is a requrest to use a PV, in a PVC specific storage properties can be requested.
+
+### Volume Lifecycle
+
++ Provisioning: PVs can be provisioned statically or dynamically
++ Binding: the user requests access to a PV using a PVC
++ Using: pods use claims as volumes
++ Reclaiming: this is what happens after the user is done with the volume and the PVC is removed. Volumes can be in different states 
+  + Retain: keeps data intact
+  + Delete: deletes the API object as well as the storage
+  + Recycle: removes contents of the storage mountpoint(will be deprecated soon)
+   
+
+### Configuring PersistentVolume Usage
+
+High level overview
+
++ The cluster administrators creates a PersistentVolume
++ The cluster user create a PersistentVolumeClaim
++ The user create a Pod that uses the PersistentVolumeClaim as storage
+
+
+### PV Demo 1
+
++ Prepare the hostPath persistent Volume
+  + minikube ssh
+  + mkdir /mnt/data
+  + echo "Kubenetes Storage" > /mnt/data/index.html
++ Create a PersistentVolume
+  + Create pv.yaml(see example)
+  + kubectl create -f pv.yaml
+  + kubectl get pv pv.yaml; notice that the status is set to avaiiable which menas it is not currently used b a PVC
++ Create a PVC
+  + Create pvc.yaml(see example)
+  + kubectl craete -f pvc.yaml
+  + kubectl get pv pv-volume
+  + kubectl get pvc pv-claim
++ Create a Pod
+  + Create pv-pod.yaml(see example)
+  + kubect craete -f pv-pod.yaml
+  + kubectl get pod pv-pod
+  + kubectl exec -it pv-pod -- /bin/bash
+  + apt-get update ;apt-get install curl;
+  + curl localhost
+
+)
 ## Lab: Configuring Storage
 
 
