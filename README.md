@@ -295,7 +295,7 @@ There are different ways to install it
 
 #### Install on Linux
 
-> curl -LO https://storage.googleapis.com/kubenertes-releases/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/amd64/kubectl
+> curl -LO https://storage.googleapis.com/kubernertes-releases/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/amd64/kubectl
 > chmod +x kubectl
 > mv kubectl /usr/local/bin
 > kubectl version
@@ -613,7 +613,7 @@ Understanding Deployments
 + resources may be used to set resource restrictions, such as limit on the number of CPUs or memory
 + teminationMessagePath where to send log messages to
 + teminationMessagePolicy how to deal with termination messages, default to "file"
-+ terminationMessagePolicy how to deal with termination messages, deault to "file" handled by kubenete DSN and not local developer
++ terminationMessagePolicy how to deal with termination messages, deault to "file" handled by kubernete DSN and not local developer
 + dnsPolicy determines how to deal with DNS messages. By default, these will be handled by Kubernetes DNS and not local resolver
 
 
@@ -802,7 +802,7 @@ metadata:
 + Bridge plugin example:
 
 {
-    "name": "kubenet",
+    "name": "kubernet",
     "type": "bridge",
     "bridge": "kube-bridge",
     "isDefaultGageway": true,
@@ -942,7 +942,7 @@ metadata:
   + Currently, best support is available for the Nginx controller
 + To enable ingres in Minikube, use minikube addons enable ingress
 + Notice that Ingress is currently beta and futher development is expected
-  + Check https://kubeneres.io/docs/concepts/services-networking/ingress/ for up to date information
+  + Check https://kuberneres.io/docs/concepts/services-networking/ingress/ for up to date information
 
 
 ### Using Ingress
@@ -1072,8 +1072,98 @@ High level overview
 )
 ## Lab: Configuring Storage
 
+> dnf install nfs-utils
+> firewall-cmd --add-service nfs --permanent
+> firewall-cmd --add-service nfs
+> vim /etc/exports
 
+> /data *(ra, no_root_squash)
+> mkdir /data
+> systemctl start nfs-server
+> showmount -e localhost
+> kubectl  exec -it nfs-pv-pod -c nfs-client1 -- touch /nfsshare/nfsclient1
+> kubectl  exec -it nfs-pv-pod -c nfs-client1 -- ls -l /nfsshare
 
 # Setting up Kubernetes for Production
+
+## Chopsing Appropriate Architecture
+
+
+Kubernetes Cluster Components
+
++ All-in-one is nice for testing, not for production
++ As a minimum, use one master node and 3 worker nodes
++ If the configuration is getting real big, use HA on the master node  
++ components
+  + etct
+  + API server with a load balancer
+  + Scheduler
+  + Controller-manager
+
+
+Deployment Solutions
+
++ All-in-one:  minikube
++ Kubernetes services as systemd unit files
++ Kubernetes services as Docker containers
++ Kubernetes services as node in public cloud
++ Kubernetes cluster build with kubeadm
+
+Kubernets Cluster Deployment Options
+
++ Minikube is nice for testing
++ Kubeadm may be used to build a real cluster
++ Kubernetes integrates easily in public cloud
++ Different Ansible, Puppet and other scripts are available for deploying Kubernetes
+
+
+## Running Kubernetes in Azure
+## Running Kubernetes in AWS
+## Running Kubernetes in Google
+## Using kubeadm to Create a Physical Cluster
+
+
 # Exploring the API
+
+## Understanding the API
+
+
++ API stands for Application Programming Interface
++ It is a library of functions and procedures whose interfaces are exposed so that external programs can use them
++ For efficient access to the API, common technologies like REST and SOAP are used
++ API endpoints provide access to specific functionality by providing a URL-like interactive
+
+
+Accessing the API
+
++ The API exposes all of the Kubernetes functions
++ The Kube-apiserver is used to access the API
++ Front-end utilities like kubectl or the Kubernetes Dashboard can be used to configure Kubernetes
++ Alternatively, you can access the API directly to get acdess to specific parts of Kubernetes which may not avaiable throught front-end utility
++ Or you can access the API using your own scripts, such as Python scripts
++ API access helps showing information, but also allows you to upload configuration, using JSON files
+
+
+## Using Kubernetes Proxy to Connect to the API
+
+Accessing the API
+
++ Remote API access requires authentication
++ Although doable, this make it complicated
++ Alternatively, use Kubernetes Proxy for API access
+  + kubectl proxy --port 8001 &
+  + curl localhost:8001
+  + curl localhost:8001/api/v1
+
+## Exploring the API
+
++ Exploring the API to list all available API endporints
+  + curl localhost:8000/foobar
+  + From ther , access the endpoint to get more details
++ curl localhost:8001/api/v1/namespaces
++ curl localhost:8001/api/v1/namespaces/default/pods
+
+
+## Lab: Exploring the API
+
 
